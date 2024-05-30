@@ -1,0 +1,14 @@
+{
+    "plugins": [],
+    "env": {
+        "browser": true
+    },
+    "globals": {},
+    "root": true,
+    "extends": [
+        "plugin:vue/vue3-recommended",
+        "eslint:recommended",
+        "@vue/eslint-config-typescript/recommended",
+        "prettier"
+    ]
+}
