@@ -8,6 +8,7 @@ export const setup = (emits: EmitType) => {
   const openDialog = async () => {
     let value = await open({
       filters: [{ name: 'PDF', extensions: ['pdf'] }],
+      multiple: true,
     })
     if (value === null) {
       return
