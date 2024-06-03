@@ -5,12 +5,6 @@ use lopdf::Document;
 use serde_json;
 use serde::{Serialize};
 
-// Learn more about Tauri commands at https://tauri.app/v1/guides/features/command
-// #[tauri::command]
-// fn greet(name: &str) -> String {
-//     format!("Hello, {}! You've been greeted from Rust!", name)
-// }
-
 #[derive(Serialize)]
 struct File {
     exists: bool,
@@ -19,10 +13,10 @@ struct File {
 }
 
 #[tauri::command]
-fn load_pdf_files(file_path: Vec<String>) -> String {
+fn load_pdf_files(path_list: Vec<String>) -> String {
     let mut file_results: Vec<File> = vec![];
 
-    for file_path in file_path.iter() {
+    for file_path in path_list.iter() {
         let result = Document::load(file_path);
         let file: File = match result {
             Ok(doc) => File {
@@ -44,7 +38,6 @@ fn load_pdf_files(file_path: Vec<String>) -> String {
 
 fn main() {
     tauri::Builder::default()
-        // .invoke_handler(tauri::generate_handler![greet])
         .invoke_handler(tauri::generate_handler![load_pdf_files])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
