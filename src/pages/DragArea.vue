@@ -1,13 +1,11 @@
 <script setup lang="ts">
-import setup from "./dragArea"
+import { EmitType, setup } from "./dragArea";
+
+const emits = defineEmits<EmitType>()
 
 const {
   openDialog,
-  debug,
-} = setup()
-
-debug()
-
+} = setup(emits)
 </script>
 
 <template>
