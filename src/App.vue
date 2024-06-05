@@ -1,9 +1,9 @@
 <script setup lang="ts">
-import { Ref, ref } from 'vue';
+import { Ref, ref } from 'vue'
 import DragArea from './components/DragArea.vue'
 import EditSettings from './components/EditSettings.vue'
 import { isFileInfoResponse, FileInfo } from './types/fileList'
-import { invoke } from "@tauri-apps/api";
+import { invoke } from '@tauri-apps/api'
 
 const fileList: Ref<FileInfo[]> = ref([])
 
@@ -15,12 +15,12 @@ const onSelectedFiles = async (pathList: string[]) => {
   showFileList.value = true
   const files = await invoke('load_pdf_files', { pathList: pathList })
   loading.value = false
-  if(typeof files === 'string') {
+  if (typeof files === 'string') {
     const parsed = JSON.parse(files)
     fileList.value.slice(0)
-    if(Array.isArray(parsed)) {
+    if (Array.isArray(parsed)) {
       parsed.forEach(file => {
-        if(isFileInfoResponse(file)) {
+        if (isFileInfoResponse(file)) {
           const dirArr = file.path.split('/')
           const fileName = dirArr[dirArr.length - 1]
           const dir = dirArr.slice(0, dirArr.length - 1).join('/')
@@ -38,7 +38,7 @@ const onSelectedFiles = async (pathList: string[]) => {
 }
 
 const startGenerating = async () => {
-  for(const file of fileList.value) {
+  for (const file of fileList.value) {
     const params = { fileDir: file.dir, fileName: file.fileName, outDir: '/Users/natsuki/Downloads/samples/file.pdf' }
     const response = await invoke('generate_sample_pdf', params)
     console.log('response', response)
@@ -48,7 +48,10 @@ const startGenerating = async () => {
 
 <template>
   <div class="">
-    <DragArea @select="onSelectedFiles" />
+    <DragArea
+      v-if="fileList.length === 0"
+      @select="onSelectedFiles"
+    />
     <EditSettings
       v-if="showFileList"
       :loading="loading"
