@@ -46,8 +46,7 @@ struct GenerationResult {
 #[tauri::command]
 fn generate_sample_pdf(file_dir: &str, file_name: &str, out_dir: String) -> String {
     let file_path = Path::new(file_dir).join(file_name);
-    let file_path_str = &file_path.to_str().unwrap();
-    let result = Document::load(&file_path);
+    let result = Document::load(file_path);
     if result.is_err() {
         println!("load error: {}", result.unwrap_err());
         let result = GenerationResult {
@@ -57,36 +56,15 @@ fn generate_sample_pdf(file_dir: &str, file_name: &str, out_dir: String) -> Stri
     }
 
     let mut doc = result.unwrap();
-    let pages = doc.get_pages();
-    let mut new_page_refs = vec![];
 
-    let mut new_doc = Document::with_version("1.5");
+    let page_count = doc.get_pages().len();
+    let delete_page_numbers: Vec<u32> = (4..=page_count)
+        .map(|x| x as u32)
+        .collect();
+    doc.delete_pages(&delete_page_numbers);
 
-    let page_ids = pages.values().take(3).cloned().collect::<Vec<_>>();
-    for page_id in &page_ids {
-        let page = doc.get_object(*page_id).unwrap();
-        let new_page_id = new_doc.new_object_id();
-        new_doc.objects.insert(new_page_id, page.clone());
-        new_page_refs.push(Object::Reference(new_page_id));
-    }
+    let save_result = doc.save(out_dir);
 
-    let mut pages_dict = lopdf::Dictionary::new();
-    pages_dict.set("Type", "Pages");
-    pages_dict.set("Kids", new_page_refs);
-    pages_dict.set("Count", page_ids.len() as i64);
-
-    let pages_id = doc.new_object_id();
-    new_doc.objects.insert(pages_id, Object::Dictionary(pages_dict));
-
-    let mut catalog_dict = lopdf::Dictionary::new();
-    catalog_dict.set("Type", "Catalog");
-    catalog_dict.set("Pages", Object::Reference(pages_id));
-
-    let catalog_id = doc.new_object_id();
-    new_doc.trailer.set("Root", catalog_id);
-    new_doc.objects.insert(catalog_id, Object::Dictionary(catalog_dict));
-
-    let save_result = new_doc.save(out_dir);
     if save_result.is_err() {
         println!("save error: {}", save_result.unwrap_err());
         let result = GenerationResult {
