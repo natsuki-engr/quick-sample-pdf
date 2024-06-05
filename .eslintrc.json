@@ -1,10 +1,11 @@
 {
-    "plugins": [],
+    "plugins": ["tailwindcss"],
     "env": {
         "browser": true
     },
     "globals": {},
     "root": true,
+    "rules": { "tailwindcss/classnames-order": "error" },
     "extends": [
         "plugin:vue/vue3-recommended",
         "eslint:recommended",
