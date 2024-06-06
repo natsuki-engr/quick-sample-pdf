@@ -7,7 +7,7 @@ const { openDialog } = setup(emits)
 </script>
 
 <template>
-  <div class="flex h-screen w-screen items-center justify-center bg-neutral-100 pb-5 pe-5 ps-5 pt-5">
+  <div class="flex h-screen w-screen items-center justify-center p-5">
     <div class="relative h-full max-h-[400px] w-full max-w-[1200px] rounded-md border-2 border-dashed border-violet-500">
       <button
         class="absolute inset-0 m-auto block h-16 w-16 rounded-lg border-2 border-solid border-violet-500 bg-white"

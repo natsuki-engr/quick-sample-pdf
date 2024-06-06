@@ -1,14 +1,13 @@
 <script setup lang="ts">
 import { type PropType } from 'vue'
 import { FileInfo } from '../types/fileList'
-import { setup } from './fileList';
-import { EmitType } from './fileList';
+import { setup } from './fileList'
+import { EmitType } from './fileList'
+import FileCard from './FileCard.vue'
 
 const emits = defineEmits<EmitType>()
 
-const {
-  onClickStartBtn,
-} = setup(emits)
+const { onClickStartBtn, removeFile } = setup(emits)
 
 defineProps({
   loading: {
@@ -25,16 +24,12 @@ defineProps({
 
 <template>
   <div>
-    <div
-      v-for="file of fileList"
+    <FileCard
+      v-for="(file, i) of fileList"
       :key="file.dir"
-    >
-    <div>
-      <span v-text="file.fileName"></span>
-      <span v-text="file.pageNum + 'ページ'"></span>
-    </div>
-      <span v-text="file.dir"></span>
-    </div>
+      :file="file"
+      @click-remove-btn="removeFile(i)"
+    ></FileCard>
 
     <div class="fixed bottom-0">
       <button @click="onClickStartBtn">PDF作成</button>
