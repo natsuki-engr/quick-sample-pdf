@@ -2,6 +2,7 @@
 import { Ref, ref } from 'vue'
 import DragArea from './components/DragArea.vue'
 import EditSettings from './components/EditSettings.vue'
+import FileList from './components/FileList.vue'
 import { isFileInfoResponse, FileInfo } from './types/fileList'
 import { invoke } from '@tauri-apps/api'
 
@@ -54,10 +55,12 @@ const startGenerating = async () => {
     />
     <EditSettings
       v-if="showFileList"
-      :loading="loading"
-      :file-list="fileList"
       @click-start-btn="startGenerating"
     />
+    <FileList
+      :loading="loading"
+      :file-list="fileList"
+    ></FileList>
   </div>
 </template>
 
