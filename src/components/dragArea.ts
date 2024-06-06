@@ -1,4 +1,4 @@
-import { open } from "@tauri-apps/api/dialog";
+import { open } from '@tauri-apps/api/dialog'
 
 export interface EmitType {
   (e: 'select', value: string[]): void
@@ -18,7 +18,6 @@ export const setup = (emits: EmitType) => {
 
     emits('select', value)
   }
-
 
   return {
     openDialog,

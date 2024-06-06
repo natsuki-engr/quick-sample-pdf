@@ -8,15 +8,15 @@ export interface FileInfo {
 export const isFileInfo = (data: unknown): data is FileInfo => {
   return (
     typeof data === 'object' &&
-    data!== null &&
+    data !== null &&
     'exists' in data &&
     typeof data.exists === 'boolean' &&
     'dir' in data &&
-    typeof data.dir ==='string' &&
+    typeof data.dir === 'string' &&
     'pageNum' in data &&
     typeof data.pageNum === 'number' &&
     'fileName' in data &&
-    typeof data.fileName ==='string'
+    typeof data.fileName === 'string'
   )
 }
 
