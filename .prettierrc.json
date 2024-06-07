@@ -19,6 +19,5 @@
     "vueIndentScriptAndStyle": false,
     "endOfLine": "auto",
     "embeddedLanguageFormatting": "auto",
-    "commaDangle": "only-multiple",
     "singleAttributePerLine": true
 }
