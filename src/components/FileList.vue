@@ -24,17 +24,25 @@ defineProps({
 
 <template>
   <div>
-    <FileCard
-      v-for="(file, i) of fileList"
-      :key="file.dir"
-      :file="file"
-      @click-remove-btn="removeFile(i)"
-    ></FileCard>
+    <TransitionGroup
+      enter-active-class="duration-300 ease-out group-transition-delay"
+      enter-from-class="opacity-0 translate-y-32"
+      enter-to-class="opacity-1"
+      leave-active-class="duration-500"
+      leave-from-class="opacity-1"
+      leave-to-class="opacity-0 translate-x-20"
+    >
+      <FileCard
+        v-for="(file, i) of fileList"
+        :key="file.dir + file.fileName"
+        :file="file"
+        :style="{ '--i': `${i + 1}00ms` }"
+        @click-remove-btn="removeFile(i)"
+      ></FileCard>
+    </TransitionGroup>
 
     <div class="fixed bottom-0">
       <button @click="onClickStartBtn">PDF作成</button>
     </div>
   </div>
 </template>
-
-<style scoped></style>

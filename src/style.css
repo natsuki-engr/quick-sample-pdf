@@ -9,4 +9,8 @@
     -webkit-appearance: none;
     -moz-appearance: none;
   }
+
+  .group-transition-delay {
+    transition-delay: var(--i);
+  }
 }
