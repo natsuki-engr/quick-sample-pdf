@@ -101,7 +101,7 @@ const removeFile = (index: number) => {
 </script>
 
 <template>
-  <div class="min-w-screen min-h-screen bg-neutral-100 p-3">
+  <div class="min-w-screen min-h-screen bg-neutral-100 p-6">
     <DragArea
       v-if="fileList.length === 0"
       @select="onSelectedFiles"
@@ -112,6 +112,7 @@ const removeFile = (index: number) => {
         :out-dir="defaultOutDir"
         @update-out-dir="setDefaultOutDir"
       />
+
       <FileList
         :loading="loading"
         :file-list="fileList"
