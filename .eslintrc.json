@@ -1,6 +1,7 @@
 {
     "plugins": ["tailwindcss"],
     "env": {
+        "node": true,
         "browser": true
     },
     "globals": {},
