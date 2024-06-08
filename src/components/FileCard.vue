@@ -26,8 +26,7 @@ const { clickRemoveBtn } = setup(emits)
       class="invisible absolute right-0 top-0 h-9 w-9 rounded-bl-md rounded-tr-lg bg-violet-500 group-hover:visible"
       @click="clickRemoveBtn"
     >
-      <span class="absolute inset-0 m-auto h-3/5 w-1 rotate-45 rounded-full bg-white"></span>
-      <span class="absolute inset-0 m-auto h-3/5 w-1 -rotate-45 rounded-full bg-white"></span>
+      <i class="i-bx-x absolute inset-0 m-auto bg-white text-3xl"></i>
     </button>
     <span
       class="block max-w-2xl overflow-hidden text-ellipsis whitespace-nowrap text-xl"
