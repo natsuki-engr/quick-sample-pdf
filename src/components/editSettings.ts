@@ -5,9 +5,14 @@ export type EmitType = {
   (e: 'updateOutDir', value: string): void
 }
 
-export const setup = (emits: EmitType) => {
-  const rangeBegin = ref<number>(0)
-  const rangeEnd = ref<number>(3)
+export type PropsType = {
+  defaultRangeEnd: number
+  outDir: string
+}
+
+export const setup = (props: PropsType, emits: EmitType) => {
+  const rangeBegin = ref<number>(1)
+  const rangeEnd = ref<number>(props.defaultRangeEnd)
 
   const openDialog = async () => {
     let value = await open({

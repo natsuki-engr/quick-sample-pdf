@@ -1,17 +1,11 @@
 <script setup lang="ts">
-import { PropType } from 'vue'
-import { EmitType, setup } from './editSettings'
+import { EmitType, PropsType, setup } from './editSettings'
 
 const emits = defineEmits<EmitType>()
 
-defineProps({
-  outDir: {
-    type: String as PropType<string>,
-    required: true,
-  },
-})
+const props = defineProps<PropsType>()
 
-const { rangeBegin, rangeEnd, openDialog } = setup(emits)
+const { rangeBegin, rangeEnd, openDialog } = setup(props, emits)
 </script>
 
 <template>

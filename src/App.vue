@@ -51,10 +51,15 @@ const fileList: Ref<FileInfo[]> = ref([
   },
 ])
 
+const defaultRangeEnd = ref<number>(1)
 const defaultOutDir = ref<string>('')
 
 const setDefaultOutDir = (value: string) => {
   defaultOutDir.value = value
+}
+
+const setDefaultRangeEnd = (value: number) => {
+  defaultRangeEnd.value = value
 }
 
 const loading = ref(false)
@@ -84,6 +89,9 @@ const onSelectedFiles = async (pathList: string[]) => {
     })
 
     setDefaultOutDir(fileList.value[0].dir + '/samples')
+
+    const pageNumbers = fileList.value.map(file => file.pageNum)
+    setDefaultRangeEnd(Math.min(3, ...pageNumbers))
   }
 }
 
