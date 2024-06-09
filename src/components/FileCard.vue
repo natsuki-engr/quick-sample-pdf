@@ -25,9 +25,10 @@ const { clickRemoveBtn } = setup(emits)
     </button>
 
     <div class="flex items-center">
-      <i class="i-bxs-file-pdf text-3xl text-violet-500"></i>
+      <i v-if="file.saved" class="i-bxs-check-circle text-3xl text-green-500"></i>
+      <i v-else class="i-bxs-file-pdf text-3xl text-violet-500"></i>
       <span
-        class=" max-w-2xl overflow-hidden text-ellipsis whitespace-nowrap text-xl"
+        class="max-w-2xl overflow-hidden text-ellipsis whitespace-nowrap text-xl"
         v-text="file.fileName"
       ></span>
     </div>

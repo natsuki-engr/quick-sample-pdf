@@ -3,6 +3,7 @@ export interface FileInfo {
   dir: string
   pageNum: number
   fileName: string
+  saved: boolean
 }
 
 export const isFileInfo = (data: unknown): data is FileInfo => {

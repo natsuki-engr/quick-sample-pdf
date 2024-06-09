@@ -41,6 +41,7 @@ const onSelectedFiles = async (pathList: string[]) => {
           dir: dir,
           pageNum: file.page_num,
           fileName: fileName,
+          saved: false
         })
       }
     })
@@ -56,7 +57,16 @@ const startGenerating = async () => {
   for (const file of fileList.value) {
     const params = { fileDir: file.dir, fileName: file.fileName, outDir: defaultOutDir.value }
     const response = await invoke('generate_sample_pdf', params)
-    console.log('response', response)
+
+    if (typeof response === 'string') {
+      const parsed = JSON.parse(response)
+
+      if(typeof parsed === 'object' && "error" in parsed) {
+        if(parsed.error === false) {
+          file.saved = true
+        }
+      }
+    }
   }
 }
 
