@@ -48,7 +48,6 @@ const { rangeBegin, rangeEnd, openDialog } = setup(emits)
       </button>
     </div>
   </div>
-  <span class="m-8 block h-0 border-[1px] border-solid border-violet-200"></span>
 </template>
 
 <style scoped></style>

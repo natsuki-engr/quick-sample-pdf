@@ -7,7 +7,7 @@ import FileCard from './FileCard.vue'
 
 const emits = defineEmits<EmitType>()
 
-const { onClickStartBtn, removeFile } = setup(emits)
+const { removeFile } = setup(emits)
 
 defineProps({
   loading: {
@@ -40,9 +40,5 @@ defineProps({
         @click-remove-btn="removeFile(i)"
       ></FileCard>
     </TransitionGroup>
-
-    <div class="fixed bottom-0">
-      <button @click="onClickStartBtn">PDF作成</button>
-    </div>
   </div>
 </template>

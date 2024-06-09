@@ -108,10 +108,21 @@ const removeFile = (index: number) => {
     />
 
     <div v-if="showFileList">
-      <EditSettings
-        :out-dir="defaultOutDir"
-        @update-out-dir="setDefaultOutDir"
-      />
+      <div class="flex items-start">
+        <EditSettings
+          :out-dir="defaultOutDir"
+          @update-out-dir="setDefaultOutDir"
+        />
+
+        <button
+          class="ms-auto rounded-xl bg-violet-500 p-5 text-3xl text-violet-50 shadow-md"
+          @click="startGenerating"
+        >
+          複製を開始
+        </button>
+      </div>
+
+      <span class="m-8 block h-0 border-[1px] border-solid border-violet-200"></span>
 
       <FileList
         :loading="loading"
