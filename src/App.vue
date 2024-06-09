@@ -80,6 +80,7 @@ const removeAll = () => {
 
 const back = () => {
   removeAll()
+  showFileList.value = false
 }
 </script>
 
