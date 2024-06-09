@@ -20,7 +20,7 @@ const setDefaultRangeEnd = (value: number) => {
 }
 
 const loading = ref(false)
-const showFileList = ref(true)
+const showFileList = ref(false)
 
 const onSelectedFiles = async (pathList: string[]) => {
   loading.value = true
@@ -74,7 +74,7 @@ const back = () => {
 </script>
 
 <template>
-  <div class="min-w-screen min-h-screen bg-neutral-100 p-6">
+  <div class="h-screen w-screen bg-neutral-100 p-6">
     <DragArea
       v-if="fileList.length === 0"
       @select="onSelectedFiles"
