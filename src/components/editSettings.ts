@@ -1,4 +1,4 @@
-import { ref } from 'vue'
+import { ref, watch } from 'vue'
 import { open } from '@tauri-apps/api/dialog'
 
 export type EmitType = {
@@ -13,6 +13,10 @@ export type PropsType = {
 export const setup = (props: PropsType, emits: EmitType) => {
   const rangeBegin = ref<number>(1)
   const rangeEnd = ref<number>(props.defaultRangeEnd)
+
+  watch(() => props.defaultRangeEnd, () => {
+    rangeEnd.value = props.defaultRangeEnd
+  })
 
   const openDialog = async () => {
     let value = await open({
