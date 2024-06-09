@@ -1,18 +1,13 @@
 <script setup lang="ts">
 import { PropType } from 'vue'
 import { setup, type EmitType } from './fileCard'
+import { FileInfo } from '../types/fileList';
 
 const emits = defineEmits<EmitType>()
 
-interface FileIfo {
-  fileName: string
-  dir: string
-  pageNum: number
-}
-
 defineProps({
   file: {
-    type: Object as PropType<FileIfo>,
+    type: Object as PropType<FileInfo>,
     required: true,
   },
 })
