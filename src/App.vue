@@ -6,50 +6,7 @@ import FileList from './components/FileList.vue'
 import { isFileInfoResponse, FileInfo } from './types/fileList'
 import { invoke } from '@tauri-apps/api'
 
-const fileList: Ref<FileInfo[]> = ref([
-  {
-    exists: true,
-    dir: '/Users/natsuki/Downloads/',
-    pageNum: 2,
-    fileName: 'phperkaigi-2024-pamphlet.pdfphperkaigi-2024-pamphlet.pdfphperkaigi-2024-pamphlet.pdfphperkaigi-2024-pamphlet.pdf',
-  },
-  {
-    exists: true,
-    dir: '/Users/natsuki/Downloads/',
-    pageNum: 2,
-    fileName: 'phperkaigi-2024-pamaphlet.pdf',
-  },
-  {
-    exists: true,
-    dir: '/Users/natsuki/Downloads/',
-    pageNum: 2,
-    fileName: 'phperkaigi-2024-pamphldet.pdf',
-  },
-  {
-    exists: true,
-    dir: '/Users/natsuki/Downloads/',
-    pageNum: 2,
-    fileName: 'phperkaigi-s2024-pamphlet.pdf',
-  },
-  {
-    exists: true,
-    dir: '/Users/natsuki/Downloads/',
-    pageNum: 2,
-    fileName: 'phperkdaigi-2024-pamphlet.pdf',
-  },
-  {
-    exists: true,
-    dir: '/Users/natsuki/Downloads/',
-    pageNum: 2,
-    fileName: 'phpaerkaigi-2024-pamphlet.pdf',
-  },
-  {
-    exists: true,
-    dir: '/Users/natsuki/Downloads/',
-    pageNum: 2,
-    fileName: 'phperkdaigi-2024-pamphlet.pdf',
-  },
-])
+const fileList: Ref<FileInfo[]> = ref([])
 
 const defaultRangeEnd = ref<number>(1)
 const defaultOutDir = ref<string>('')
@@ -97,7 +54,7 @@ const onSelectedFiles = async (pathList: string[]) => {
 
 const startGenerating = async () => {
   for (const file of fileList.value) {
-    const params = { fileDir: file.dir, fileName: file.fileName, outDir: '/Users/natsuki/Downloads/samples/file.pdf' }
+    const params = { fileDir: file.dir, fileName: file.fileName, outDir: defaultOutDir.value }
     const response = await invoke('generate_sample_pdf', params)
     console.log('response', response)
   }
@@ -134,6 +91,7 @@ const back = () => {
       </div>
       <div class="flex items-start">
         <EditSettings
+          :default-range-end="defaultRangeEnd"
           :out-dir="defaultOutDir"
           @update-out-dir="setDefaultOutDir"
         />

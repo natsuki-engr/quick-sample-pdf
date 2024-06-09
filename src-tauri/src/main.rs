@@ -63,7 +63,9 @@ fn generate_sample_pdf(file_dir: &str, file_name: &str, out_dir: String) -> Stri
         .collect();
     doc.delete_pages(&delete_page_numbers);
 
-    let save_result = doc.save(out_dir);
+    let out_file_path = Path::new(&out_dir).join(file_name);
+
+    let save_result = doc.save(out_file_path);
 
     if save_result.is_err() {
         println!("save error: {}", save_result.unwrap_err());
