@@ -98,6 +98,14 @@ const startGenerating = async () => {
 const removeFile = (index: number) => {
   fileList.value = fileList.value.filter((_, i) => i !== index)
 }
+
+const removeAll = () => {
+  fileList.value = []
+}
+
+const back = () => {
+  removeAll()
+}
 </script>
 
 <template>
@@ -108,6 +116,14 @@ const removeFile = (index: number) => {
     />
 
     <div v-if="showFileList">
+      <div class="mb-2">
+        <a
+          class="relative flex cursor-pointer items-center"
+          @click="back"
+        >
+          <i class="i-bx-chevron-left text-2xl"></i><span class="leading-none">戻る</span></a
+        >
+      </div>
       <div class="flex items-start">
         <EditSettings
           :out-dir="defaultOutDir"
@@ -127,7 +143,6 @@ const removeFile = (index: number) => {
       <FileList
         :loading="loading"
         :file-list="fileList"
-        @click-start-btn="startGenerating"
         @remove-file="removeFile"
       ></FileList>
     </div>
