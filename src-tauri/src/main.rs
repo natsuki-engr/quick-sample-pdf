@@ -3,9 +3,11 @@
 
 use std::{path::Path};
 
-use lopdf::{Document, Object};
+use lopdf::{Document};
 use serde_json;
 use serde::{Serialize};
+
+mod copy_pages;
 
 #[derive(Serialize)]
 struct File {
@@ -57,11 +59,7 @@ fn generate_sample_pdf(file_dir: &str, file_name: &str, out_dir: String) -> Stri
 
     let mut doc = result.unwrap();
 
-    let page_count = doc.get_pages().len();
-    let delete_page_numbers: Vec<u32> = (4..=page_count)
-        .map(|x| x as u32)
-        .collect();
-    doc.delete_pages(&delete_page_numbers);
+    doc = copy_pages::main(doc).unwrap();
 
     let out_file_path = Path::new(&out_dir).join(file_name);
 
