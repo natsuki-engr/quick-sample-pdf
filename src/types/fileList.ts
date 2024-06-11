@@ -4,6 +4,7 @@ export interface FileInfo {
   pageNum: number
   fileName: string
   saved: boolean
+  pageRange: [number, number] | null
 }
 
 export const isFileInfo = (data: unknown): data is FileInfo => {

@@ -5,7 +5,7 @@ const emits = defineEmits<EmitType>()
 
 const props = defineProps<PropsType>()
 
-const { rangeBegin, rangeEnd, openDialog } = setup(props, emits)
+const { rangeBegin, rangeEnd, outDir, updateRangeBegin, updateRangeEnd, openDialog } = setup(props, emits)
 </script>
 
 <template>
@@ -17,6 +17,7 @@ const { rangeBegin, rangeEnd, openDialog } = setup(props, emits)
         class="w-20 rounded-md border-2 border-solid border-violet-300 p-1 px-3 text-right text-lg"
         type="number"
         placeholder="開始ページ"
+        @change="updateRangeBegin"
       />
       <span class="me-2 ms-2">-</span>
       <input
@@ -24,6 +25,7 @@ const { rangeBegin, rangeEnd, openDialog } = setup(props, emits)
         class="w-20 rounded-md border-2 border-solid border-violet-300 p-1 px-3 text-right text-lg"
         type="number"
         placeholder="終了ページ"
+        @change="updateRangeEnd"
       />
     </div>
 

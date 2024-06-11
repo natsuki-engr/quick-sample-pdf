@@ -1,22 +1,43 @@
 import { ref, watch } from 'vue'
 import { open } from '@tauri-apps/api/dialog'
+import { GlobalSettings } from '../App.vue'
 
 export type EmitType = {
-  (e: 'updateOutDir', value: string): void
+  (e: 'updateGlobalSettings', settings: Partial<GlobalSettings>): void
 }
 
 export type PropsType = {
-  defaultRangeEnd: number
-  outDir: string
+  globalSettings: GlobalSettings
 }
 
 export const setup = (props: PropsType, emits: EmitType) => {
-  const rangeBegin = ref<number>(1)
-  const rangeEnd = ref<number>(props.defaultRangeEnd)
+  const rangeBegin = ref<number>(props.globalSettings.rangeBegin)
+  const rangeEnd = ref<number>(props.globalSettings.rangeEnd)
+  const outDir = ref<string>(props.globalSettings.outDir)
 
-  watch(() => props.defaultRangeEnd, () => {
-    rangeEnd.value = props.defaultRangeEnd
-  })
+  watch(() => props.globalSettings, () => {
+    rangeBegin.value = props.globalSettings.rangeBegin
+    rangeEnd.value = props.globalSettings.rangeEnd
+    outDir.value = props.globalSettings.outDir
+  }, {deep: true})
+
+  const updateGlobalSettings = (settings: {rangeBegin?: number, rangeEnd?: number, outDir?: string}) => {
+    emits('updateGlobalSettings', settings)
+  }
+
+  const updateRangeBegin = (e: Event) => {
+    const value = (e?.target as HTMLInputElement)?.value
+    if(value != null) {
+      updateGlobalSettings({rangeBegin: Number(value)})
+    }
+  }
+
+  const updateRangeEnd = (e: Event) => {
+    const value = (e?.target as HTMLInputElement)?.value
+    if(value != null) {
+      updateGlobalSettings({rangeEnd: Number(value)})
+    }
+  }
 
   const openDialog = async () => {
     let value = await open({
@@ -29,12 +50,15 @@ export const setup = (props: PropsType, emits: EmitType) => {
       value = value[0]
     }
 
-    emits('updateOutDir', value)
+    updateGlobalSettings({outDir: value})
   }
 
   return {
     rangeBegin,
     rangeEnd,
+    outDir,
+    updateRangeBegin,
+    updateRangeEnd,
     openDialog,
   }
 }

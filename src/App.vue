@@ -6,21 +6,34 @@ import FileList from './components/FileList.vue'
 import { isFileInfoResponse, FileInfo } from './types/fileList'
 import { invoke } from '@tauri-apps/api'
 
-const fileList: Ref<FileInfo[]> = ref([])
-
-const defaultRangeEnd = ref<number>(1)
-const defaultOutDir = ref<string>('')
-
-const setDefaultOutDir = (value: string) => {
-  defaultOutDir.value = value
+export interface GlobalSettings {
+  rangeBegin: number
+  rangeEnd: number
+  outDir: string
 }
 
-const setDefaultRangeEnd = (value: number) => {
-  defaultRangeEnd.value = value
+const fileList: Ref<FileInfo[]> = ref([])
+
+const updateGlobalSettings = (settings: Partial<GlobalSettings>) => {
+  globalSettings.value = {
+    ...globalSettings.value,
+    ...settings,
+  }
+}
+
+const setGlobalRange = (begin: number, end: number) => {
+  globalSettings.value.rangeBegin = begin
+  globalSettings.value.rangeEnd = end
 }
 
 const loading = ref(false)
 const showFileList = ref(false)
+
+const globalSettings = ref({
+  rangeBegin: 0,
+  rangeEnd: 0,
+  outDir: '',
+})
 
 const onSelectedFiles = async (pathList: string[]) => {
   loading.value = true
@@ -29,6 +42,10 @@ const onSelectedFiles = async (pathList: string[]) => {
   loading.value = false
   let parsed
   if (typeof files === 'string' && Array.isArray((parsed = JSON.parse(files)))) {
+    const pageNumbers = fileList.value.map(file => file.pageNum)
+    const minPageNumber = Math.min(3, ...pageNumbers)
+    setGlobalRange(1, minPageNumber)
+
     fileList.value.slice(0)
     parsed.forEach(file => {
       if (isFileInfoResponse(file)) {
@@ -41,28 +58,32 @@ const onSelectedFiles = async (pathList: string[]) => {
           dir: dir,
           pageNum: file.page_num,
           fileName: fileName,
-          saved: false
+          saved: false,
+          pageRange: null,
         })
       }
     })
 
-    setDefaultOutDir(fileList.value[0].dir + '/samples')
-
-    const pageNumbers = fileList.value.map(file => file.pageNum)
-    setDefaultRangeEnd(Math.min(3, ...pageNumbers))
+    updateGlobalSettings({outDir: fileList.value[0].dir + '/samples'})
   }
 }
 
 const startGenerating = async () => {
   for (const file of fileList.value) {
-    const params = { fileDir: file.dir, fileName: file.fileName, outDir: defaultOutDir.value }
+    const params = {
+      fileDir: file.dir,
+      fileName: file.fileName,
+      outDir: globalSettings.value.outDir,
+      rangeBegin: file.pageRange?.[0] ?? globalSettings.value.rangeBegin,
+      rangeEnd: file.pageRange?.[1] ?? globalSettings.value.rangeEnd,
+    }
     const response = await invoke('generate_sample_pdf', params)
 
     if (typeof response === 'string') {
       const parsed = JSON.parse(response)
 
-      if(typeof parsed === 'object' && "error" in parsed) {
-        if(parsed.error === false) {
+      if (typeof parsed === 'object' && 'error' in parsed) {
+        if (parsed.error === false) {
           file.saved = true
         }
       }
@@ -102,9 +123,8 @@ const back = () => {
       </div>
       <div class="flex items-start">
         <EditSettings
-          :default-range-end="defaultRangeEnd"
-          :out-dir="defaultOutDir"
-          @update-out-dir="setDefaultOutDir"
+          :global-settings="globalSettings"
+          @update-global-settings="updateGlobalSettings"
         />
 
         <button
