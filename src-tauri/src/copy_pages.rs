@@ -3,12 +3,15 @@ use lopdf::Document;
 use lopdf::{Object, ObjectId};
 use std::collections::BTreeMap;
 
-pub fn main(mut doc: Document) -> Result<Document, &'static str> {
+pub fn main(mut doc: Document, range_begin: u32, range_end: u32) -> Result<Document, &'static str> {
     let page_count = doc.get_pages().len();
-    let delete_page_numbers: Vec<u32> = (4..=page_count).map(|x| x as u32).collect();
+    let delete_page_numbers: Vec<u32> = (1..=page_count)
+        .map(|x| x as u32)
+        .filter(|x| range_begin <= *x && *x <= range_end)
+        .collect();
 
     if delete_page_numbers.len() <= page_count {
-        doc = duplicate(doc).unwrap();
+        doc = duplicate(doc, range_begin, range_end).unwrap();
     } else {
         doc.delete_pages(&delete_page_numbers);
     }
@@ -16,8 +19,8 @@ pub fn main(mut doc: Document) -> Result<Document, &'static str> {
     Ok(doc)
 }
 
-pub fn duplicate(mut doc: Document) -> Result<Document, &'static str> {
-    let copy_page_numbers: Vec<u32> = (1..=3).map(|x| x as u32).collect();
+pub fn duplicate(mut doc: Document, range_begin: u32, range_end: u32) -> Result<Document, &'static str> {
+    let copy_page_numbers: Vec<u32> = (range_begin..=range_end).map(|x| x as u32).collect();
 
     // Collect all Documents Objects grouped by a map
     let mut documents_pages = BTreeMap::new();
