@@ -47,7 +47,7 @@ struct GenerationResult {
 }
 
 #[tauri::command]
-fn generate_sample_pdf(file_dir: &str, file_name: &str, out_dir: String) -> String {
+fn generate_sample_pdf(file_dir: &str, file_name: &str, out_dir: String, range_begin: u32, range_end: u32) -> String {
     let file_path = Path::new(file_dir).join(file_name);
     let result = Document::load(file_path);
     if result.is_err() {
