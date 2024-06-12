@@ -3,9 +3,18 @@ export interface FileInfo {
   dir: string
   pageNum: number
   fileName: string
-  saved: boolean
+  // saved: boolean
+  status: FileStatusType
   pageRange: [number, number] | null
 }
+
+export const FileStatus = {
+  LOADED: 'loaded',
+  SAVED: 'saved',
+  SAVE_FAILED: 'save-failed'
+} as const
+
+export type FileStatusType = typeof FileStatus[keyof typeof FileStatus]
 
 export const isFileInfo = (data: unknown): data is FileInfo => {
   return (

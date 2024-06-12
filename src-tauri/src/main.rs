@@ -43,6 +43,7 @@ fn load_pdf_files(path_list: Vec<String>) -> String {
 #[derive(Serialize)]
 struct GenerationResult {
     error: bool,
+    error_code: &'static str,
 }
 
 #[tauri::command]
@@ -53,6 +54,7 @@ fn generate_sample_pdf(file_dir: &str, file_name: &str, out_dir: String) -> Stri
         println!("load error: {}", result.unwrap_err());
         let result = GenerationResult {
             error: true,
+            error_code: "file-not-found",
         };
         return serde_json::to_string(&result).unwrap();
     }
@@ -69,12 +71,14 @@ fn generate_sample_pdf(file_dir: &str, file_name: &str, out_dir: String) -> Stri
         println!("save error: {}", save_result.unwrap_err());
         let result = GenerationResult {
             error: true,
+            error_code: "save-failed",
         };
         return serde_json::to_string(&result).unwrap();
     }
 
     let result = GenerationResult {
         error: false,
+        error_code: "",
     };
     serde_json::to_string(&result).unwrap()
 }

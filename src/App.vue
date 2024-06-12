@@ -3,7 +3,7 @@ import { Ref, ref } from 'vue'
 import DragArea from './components/DragArea.vue'
 import EditSettings from './components/EditSettings.vue'
 import FileList from './components/FileList.vue'
-import { isFileInfoResponse, FileInfo } from './types/fileList'
+import { isFileInfoResponse, FileInfo, FileStatus } from './types/fileList'
 import { invoke } from '@tauri-apps/api'
 
 export interface GlobalSettings {
@@ -58,7 +58,7 @@ const onSelectedFiles = async (pathList: string[]) => {
           dir: dir,
           pageNum: file.page_num,
           fileName: fileName,
-          saved: false,
+          status: FileStatus.LOADED,
           pageRange: null,
         })
       }
@@ -83,8 +83,11 @@ const startGenerating = async () => {
       const parsed = JSON.parse(response)
 
       if (typeof parsed === 'object' && 'error' in parsed) {
+        console.log('parsed', parsed)
         if (parsed.error === false) {
-          file.saved = true
+          file.status = FileStatus.SAVED
+        } else {
+          file.status = FileStatus.SAVE_FAILED
         }
       }
     }
