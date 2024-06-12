@@ -109,7 +109,7 @@ const back = () => {
 </script>
 
 <template>
-  <div class="h-screen w-screen bg-neutral-100 p-6">
+  <div class="h-screen w-screen overflow-y-scroll bg-neutral-100 p-6">
     <DragArea
       v-if="fileList.length === 0"
       @select="onSelectedFiles"
