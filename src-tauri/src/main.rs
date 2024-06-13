@@ -61,7 +61,7 @@ fn generate_sample_pdf(file_dir: &str, file_name: &str, out_dir: String, range_b
 
     let mut doc = result.unwrap();
 
-    doc = copy_pages::main(doc).unwrap();
+    doc = copy_pages::main(doc, range_begin, range_end).unwrap();
 
     let out_file_path = Path::new(&out_dir).join(file_name);
 
