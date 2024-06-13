@@ -5,6 +5,8 @@ import EditSettings from './components/EditSettings.vue'
 import FileList from './components/FileList.vue'
 import { isFileInfoResponse, FileInfo, FileStatus } from './types/fileList'
 import { invoke } from '@tauri-apps/api'
+import StartBtn from './components/StartBtn.vue'
+import { ProcessStatus } from './types/processStatus';
 
 export interface GlobalSettings {
   rangeBegin: number
@@ -64,11 +66,17 @@ const onSelectedFiles = async (pathList: string[]) => {
       }
     })
 
-    updateGlobalSettings({outDir: fileList.value[0].dir + '/samples'})
+    updateGlobalSettings({ outDir: fileList.value[0].dir + '/samples' })
+    processStatus.value = ProcessStatus.FILE_LOADED
+    progress.value = 0
   }
 }
 
+const processStatus = ref<(typeof ProcessStatus)[keyof typeof ProcessStatus]>(ProcessStatus.NONE)
+const progress = ref<number>(0)
+
 const startGenerating = async () => {
+  processStatus.value = ProcessStatus.GENERATING
   for (const file of fileList.value) {
     const params = {
       fileDir: file.dir,
@@ -78,7 +86,13 @@ const startGenerating = async () => {
       rangeEnd: file.pageRange?.[1] ?? globalSettings.value.rangeEnd,
     }
     const response = await invoke('generate_sample_pdf', params)
+    await new Promise<void>(resolve => {
+      setTimeout(() => {
+        resolve()
+      }, 500)}
+    )
 
+    progress.value += 1
     if (typeof response === 'string') {
       const parsed = JSON.parse(response)
 
@@ -92,6 +106,7 @@ const startGenerating = async () => {
       }
     }
   }
+  processStatus.value = ProcessStatus.DONE
 }
 
 const removeFile = (index: number) => {
@@ -105,6 +120,7 @@ const removeAll = () => {
 const back = () => {
   removeAll()
   showFileList.value = false
+  processStatus.value = ProcessStatus.NONE
 }
 </script>
 
@@ -130,12 +146,11 @@ const back = () => {
           @update-global-settings="updateGlobalSettings"
         />
 
-        <button
-          class="ms-auto rounded-xl bg-violet-500 p-5 text-3xl text-violet-50 shadow-md"
-          @click="startGenerating"
-        >
-          複製を開始
-        </button>
+        <StartBtn
+          :status="processStatus"
+          :percentage="progress / (fileList.length || 1) * 100"
+          @start-generating="startGenerating"
+        />
       </div>
 
       <span class="m-8 block h-0 border-[1px] border-solid border-violet-200"></span>
