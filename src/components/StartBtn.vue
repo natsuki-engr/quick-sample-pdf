@@ -3,11 +3,11 @@ import { setup } from './startBtn'
 import { PropsType, EmitType } from './startBtn'
 import { ProcessStatus } from '../types/processStatus'
 
-const props = defineProps<PropsType>()
+defineProps<PropsType>()
 
 const emits = defineEmits<EmitType>()
 
-const { start } = setup(props, emits)
+const { start } = setup(emits)
 </script>
 
 <template>

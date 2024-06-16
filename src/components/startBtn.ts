@@ -7,7 +7,7 @@ export type EmitType = {
   (e: 'startGenerating'): void
 }
 
-export const setup = (props: PropsType, emits: EmitType) => {
+export const setup = (emits: EmitType) => {
   const start = () => {
     emits('startGenerating')
   }
